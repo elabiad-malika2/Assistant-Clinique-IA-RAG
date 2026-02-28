@@ -1,0 +1,30 @@
+# monitoring/alerts.yml
+groups:
+  - name: cliniq_alerts
+    rules:
+      # ALERTE 1 : LATENCE (Seuil : Si l'IA met plus de 5 secondes à répondre)
+      - alert: LatenceRAG_Elevee
+        expr: rate(http_request_duration_seconds_sum[1m]) / rate(http_request_duration_seconds_count[1m]) > 5.0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "L'assistant CliniQ est très lent (> 5 secondes)."
+
+      # ALERTE 2 : ERREURS (Seuil : Si le compteur d'erreur augmente)
+      - alert: ErreursRAG_Critique
+        expr: rate(rag_errors_total[1m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Des erreurs ont été détectées lors de la génération de réponses."
+
+      # ALERTE 3 : QUALITÉ (Seuil : Si la note de fidélité de DeepEval passe sous 70%)
+      - alert: QualiteRAG_Faible_Hallucination
+        expr: rag_faithfulness < 0.7
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Risque d'hallucination ! La fidélité au protocole est sous les 70%."
