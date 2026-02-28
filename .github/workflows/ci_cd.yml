@@ -39,7 +39,7 @@ jobs:
 
       - name: Tests Unitaires (API, RAG, Authentification)
         run: |
-          pytest tests/ --maxfail=1 --disable-warnings
+          pytest tests/ --maxfail=5 --disable-warnings
 
       - name: Qualité du code (Linting & Formatting)
         # Continue-on-error permet au CI de ne pas bloquer si vous avez un espace en trop,
