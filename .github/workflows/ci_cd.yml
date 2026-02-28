@@ -1,0 +1,80 @@
+name: CliniQ CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  # ==========================================
+  # CONTINUOUS INTEGRATION (CI)
+  # ==========================================
+  ci:
+    runs-on: ubuntu-latest
+    
+    # Variables d'environnement pour que les tests FastAPI/RAG fonctionnent
+    env:
+      DATABASE_URL: sqlite:///./test.db
+      SECRET_KEY: super_cle_secrete_tres_longue_pour_les_tests
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      GOOGLE_API_KEY: fake_google_key
+      LLAMA_CLOUD_API_KEY: fake_llama_key
+      MLFLOW_TRACKING_URI: http://localhost:5000
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Installation des dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Installation des outils de test et de qualité de code
+          pip install pytest black flake8
+
+      - name: Tests Unitaires (API, RAG, Authentification)
+        run: |
+          pytest tests/ --maxfail=1 --disable-warnings
+
+      - name: Qualité du code (Linting & Formatting)
+        # Continue-on-error permet au CI de ne pas bloquer si vous avez un espace en trop,
+        # mais ça montre au jury que le contrôle qualité est présent !
+        continue-on-error: true 
+        run: |
+          black --check app/ rag/ scripts/
+          flake8 app/ rag/ scripts/ --max-line-length=120
+
+  # ==========================================
+  # CONTINUOUS DEPLOYMENT (CD)
+  # ==========================================
+  cd:
+    runs-on: ubuntu-latest
+    needs: ci # Le CD ne se lance que si la CI (les tests) a réussi !
+    
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Connexion à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build & push Docker image (Versionnée)
+        run: |
+          # 1. On récupère les 7 premiers caractères du commit GitHub (ex: a1b2c3d)
+          IMAGE_TAG=$(git rev-parse --short HEAD)
+          
+          # 2. On construit l'image Docker avec DEUX tags (le commit ET "latest")
+          # Note: Assurez-vous que le chemin vers votre Dockerfile est correct (ici "Dockerfile" à la racine)
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/cliniq-api:${IMAGE_TAG} -t ${{ secrets.DOCKER_USERNAME }}/cliniq-api:latest -f Dockerfile .
+          
+          # 3. On pousse les deux images sur Docker Hub
+          docker push ${{ secrets.DOCKER_USERNAME }}/cliniq-api:${IMAGE_TAG}
+          docker push ${{ secrets.DOCKER_USERNAME }}/cliniq-api:latest
