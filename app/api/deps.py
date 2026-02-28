@@ -21,14 +21,18 @@ def get_db():
 def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise InvalidTokenException() 
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise InvalidTokenException()
+        try:
+            user_id = int(user_id)
+        except (TypeError, ValueError):
+            raise InvalidTokenException()
     except JWTError:
         raise InvalidTokenException()
-        
-    user = db.query(User).filter(User.email == email).first()
+
+    user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise InvalidTokenException()
-        
+
     return user
