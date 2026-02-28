@@ -5,10 +5,8 @@ services:
     image: postgres:15
     container_name: cliniq_db
     restart: always
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - ../.env
     ports:
       - "5432:5432"
     volumes:
@@ -22,14 +20,62 @@ services:
     restart: always
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - SECRET_KEY=${SECRET_KEY}
+    env_file:
+      - ../.env
     depends_on:
       - db
     volumes:
       - ../:/app           
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.10.2
+    container_name: cliniq_mlflow
+    ports:
+      - "5000:5000"
+    command: mlflow server --host 0.0.0.0 --port 5000
+  ollama:
+    image: ollama/ollama:latest
+    container_name: cliniq_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/usr/share/ollama/.ollama
+    tty: true
+    stdin_open: true
+  # ... (db, api, mlflow) ...
+
+  # 1. cAdvisor : Collecte les métriques CPU / RAM de Docker
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: cliniq_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  # 2. Prometheus : Stocke les métriques et gère les alertes
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cliniq_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../monitoring/alerts.yml:/etc/prometheus/alerts.yml
+
+  # 3. Grafana : Les beaux tableaux de bord visuels
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cliniq_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # Mot de passe par défaut
+
 volumes:
   postgres_data:
+  ollama_data:
