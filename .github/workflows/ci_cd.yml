@@ -21,6 +21,10 @@ jobs:
       LLAMA_CLOUD_API_KEY: fake_llama_key
       MLFLOW_TRACKING_URI: http://localhost:5000
 
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: test_db
+
     steps:
       - name: Récupération du code
         uses: actions/checkout@v4
