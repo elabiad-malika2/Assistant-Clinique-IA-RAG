@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from app.models.query import Query
 from rag.rag_pipeline import ask_clinical_assistant
-from mlops.deepeval_metrics import evaluate_rag_response
-from app.services.mlflow_service import log_to_mlflow
+# from mlops.deepeval_metrics import evaluate_rag_response
+# from app.services.mlflow_service import log_to_mlflow
 
 from monitoring.prometheus_metrics import (
     RAG_REQUESTS_TOTAL, 

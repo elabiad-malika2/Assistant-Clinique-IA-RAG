@@ -10,7 +10,7 @@ def log_to_mlflow(question: str, response: str, contexts: list, metrics: dict):
     """
     Enregistre absolument TOUT dans le tableau de bord MLflow.
     """
-    print("📝 Sauvegarde dans MLflow...")
+    print("Sauvegarde dans MLflow...")
     
     with mlflow.start_run():
         
