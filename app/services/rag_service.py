@@ -32,14 +32,14 @@ def process_and_save_query(db: Session, user_id: int, question: str):
         db.refresh(nouvelle_requete)
 
         # 3. MLOPS : On note la réponse avec DeepEval
-        notes_ia = evaluate_rag_response(question, reponse_ia, sources)
+        # notes_ia = evaluate_rag_response(question, reponse_ia, sources)
         
         # 4. MLOPS : On envoie tout au tableau de bord MLflow
-        log_to_mlflow(question, reponse_ia, sources, notes_ia)
+        # log_to_mlflow(question, reponse_ia, sources, notes_ia)
 
-        # 5. MONITORING : On met à jour les jauges de qualité pour Prometheus !
-        RAG_ANSWER_RELEVANCE.set(notes_ia.get("answer_relevance", 0.0))
-        RAG_FAITHFULNESS.set(notes_ia.get("faithfulness", 0.0))
+        # # 5. MONITORING : On met à jour les jauges de qualité pour Prometheus !
+        # RAG_ANSWER_RELEVANCE.set(notes_ia.get("answer_relevance", 0.0))
+        # RAG_FAITHFULNESS.set(notes_ia.get("faithfulness", 0.0))
 
     except Exception as e:
         # +1 au compteur des erreurs si l'IA ou la DB plante !

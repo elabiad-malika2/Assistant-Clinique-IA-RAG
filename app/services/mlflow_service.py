@@ -28,8 +28,8 @@ def log_to_mlflow(question: str, response: str, contexts: list, metrics: dict):
         
         # 2. Logger les paramètres du LLM (Gemini)
         mlflow.log_params({
-            "llm_model": "gemini-2.5-flash-lite",
-            "temperature": 0.0,
+            "llm_model": "gemini-flash-latest",
+            "temperature": 0.1,
             "top_p": 0.9,
             "top_k": 40,
             "max_tokens": 1024,
