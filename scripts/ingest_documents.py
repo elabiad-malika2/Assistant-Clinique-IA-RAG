@@ -30,7 +30,7 @@ def main():
         chunks = chunk_markdown_text(markdown_content)
         
         if not chunks:
-            print("❌ Erreur : Le document semble vide, aucun chunk généré.")
+            print(" Erreur : Le document semble vide, aucun chunk généré.")
             return
 
         # ÉTAPE 3 : EMBEDDINGS (Création des vecteurs avec Hugging Face)
@@ -42,7 +42,7 @@ def main():
         print("\n--- ÉTAPE 4 : STOCKAGE DANS CHROMADB ---")
         add_documents_to_chroma(documents=chunks, embeddings=embeddings)
 
-        print("\n🎉 INGESTION TERMINÉE AVEC SUCCÈS ! 🎉")
+        print("\n INGESTION TERMINÉE AVEC SUCCÈS ! 🎉")
         
         # ÉTAPE 5 : TEST DE RECHERCHE RAPIDE (Pour vérifier que le RAG fonctionne)
         print("\n--- TEST DE RECHERCHE ---")
@@ -54,13 +54,13 @@ def main():
         
         # Affichage du résultat s'il y en a un
         if results and results['documents'] and results['documents'][0]:
-            print("\n✅ Meilleur résultat trouvé (extrait) :")
+            print("\n Meilleur résultat trouvé (extrait) :")
             print(f"{results['documents'][0][0][:300]}...") # Affiche les 300 premiers caractères
         else:
             print("Aucun résultat trouvé dans la base.")
 
     except Exception as e:
-        print(f"\n❌ Une erreur inattendue est survenue : {e}")
+        print(f"\n Une erreur inattendue est survenue : {e}")
 
 if __name__ == "__main__":
     main()
