@@ -15,9 +15,9 @@ def get_embedding_model():
     """
     global _model
     if _model is None:
-        print(f"🧠 Chargement du modèle d'embedding : {MODEL_NAME}...")
+        print(f" Chargement du modèle d'embedding : {MODEL_NAME}...")
         _model = SentenceTransformer(MODEL_NAME)
-        print("✅ Modèle chargé avec succès !")
+        print(" Modèle chargé avec succès !")
     return _model
 
 def embed_text(text: str) -> List[float]:
