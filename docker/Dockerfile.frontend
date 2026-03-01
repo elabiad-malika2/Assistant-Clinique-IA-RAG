@@ -1,0 +1,16 @@
+# docker/Dockerfile.frontend
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# 1. On copie les dépendances depuis la racine
+COPY requirements.txt .
+
+# 2. On installe les librairies du frontend
+RUN pip install --no-cache-dir streamlit requests pandas
+
+# 3. On copie votre dossier frontend
+COPY ./frontend /app/frontend
+
+# 4. On lance l'interface Streamlit
+CMD ["streamlit", "run", "frontend/app.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -76,6 +76,23 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin # Mot de passe par défaut
 
+  # ... (votre db et votre api existantes) ...
+
+  frontend:
+    build:
+      context: ..          
+      dockerfile: docker/Dockerfile.frontend  
+    container_name: cliniq_frontend
+    restart: always
+    ports:
+      - "8501:8501" 
+    environment:
+      - API_URL=http://api:8000 
+    depends_on:
+      - api
+    volumes:
+      - ../frontend:/app/frontend 
+
 volumes:
   postgres_data:
   ollama_data:
