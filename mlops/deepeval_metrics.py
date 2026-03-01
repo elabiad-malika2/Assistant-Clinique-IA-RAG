@@ -5,10 +5,7 @@ from deepeval.metrics import (
     ContextualPrecisionMetric,
     ContextualRecallMetric,
 )
-from mlops.local_llm import LocalModel
-from deepeval.test_case import LLMTestCase
-from deepeval.models import GeminiModel
-from google.genai.errors import ServerError 
+from deepeval.test_case import LLMTestCase 
 from deepeval.models import OllamaModel
 
 
@@ -37,10 +34,10 @@ def evaluate_rag_response(question: str, response: str, contexts: list) -> dict:
     
     model = _build_ollama_model()
 
-    relevancy = AnswerRelevancyMetric(threshold=0.7, model=model)
-    faithfulness = FaithfulnessMetric(threshold=0.7, model=model)
-    precision = ContextualPrecisionMetric(threshold=0.7, model=model)
-    recall = ContextualRecallMetric(threshold=0.7, model=model)
+    relevancy = AnswerRelevancyMetric(threshold=0.7, model=model,async_mode=False)
+    faithfulness = FaithfulnessMetric(threshold=0.7, model=model,async_mode=False)
+    precision = ContextualPrecisionMetric(threshold=0.7, model=model,async_mode=False)
+    recall = ContextualRecallMetric(threshold=0.7, model=model,async_mode=False)
 
     relevancy.measure(test_case)
     faithfulness.measure(test_case)
