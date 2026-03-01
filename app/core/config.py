@@ -8,14 +8,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
 
     # Ajouter pour Postgres
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
+    POSTGRES_USER: str =None
+    POSTGRES_PASSWORD: str=None
+    POSTGRES_DB: str=None
 
     # Ajouter pour parsing
-    LLAMA_CLOUD_API_KEY : str
+    LLAMA_CLOUD_API_KEY : str=None
 
-    GOOGLE_API_KEY:str
+    GOOGLE_API_KEY:str=None
 
     class Config:
         env_file = ".env"
