@@ -27,7 +27,7 @@ def add_documents_to_chroma(documents: List[Document], embeddings: List[List[flo
     et les sauvegarde directement dans ChromaDB.
     """
     if not documents:
-        print("⚠️ Aucun document à ajouter.")
+        print(" Aucun document à ajouter.")
         return
 
     collection = get_chroma_collection()

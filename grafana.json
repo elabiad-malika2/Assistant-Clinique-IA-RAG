@@ -1,0 +1,57 @@
+{
+  "title": "🏥 CliniQ - Monitoring RAG & Infrastructure",
+  "tags": ["cliniq", "rag", "fastapi", "docker"],
+  "timezone": "browser",
+  "refresh": "5s",
+  "schemaVersion": 36,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Questions posées au RAG",
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 0 },
+      "targets": [ { "expr": "rag_requests_total", "legendFormat": "Requêtes" } ]
+    },
+    {
+      "type": "stat",
+      "title": "Erreurs Critiques RAG",
+      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 0 },
+      "targets": [ { "expr": "rag_errors_total", "legendFormat": "Erreurs" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] } } }
+    },
+    {
+      "type": "gauge",
+      "title": "Score de Fidélité (DeepEval)",
+      "gridPos": { "h": 5, "w": 6, "x": 12, "y": 0 },
+      "targets": [ { "expr": "rag_faithfulness", "legendFormat": "Faithfulness" } ],
+      "fieldConfig": { "defaults": { "min": 0, "max": 1, "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "orange", "value": 0.5 }, { "color": "green", "value": 0.7 } ] } } }
+    },
+    {
+      "type": "gauge",
+      "title": "Score de Pertinence (DeepEval)",
+      "gridPos": { "h": 5, "w": 6, "x": 18, "y": 0 },
+      "targets": [ { "expr": "rag_answer_relevance", "legendFormat": "Relevance" } ],
+      "fieldConfig": { "defaults": { "min": 0, "max": 1, "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "orange", "value": 0.5 }, { "color": "green", "value": 0.7 } ] } } }
+    },
+    {
+      "type": "timeseries",
+      "title": "⏱️ Latence de l'API (Temps de réponse)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 5 },
+      "targets": [ { "expr": "rate(http_request_duration_seconds_sum[1m]) / rate(http_request_duration_seconds_count[1m])", "legendFormat": "Latence moyenne (secondes)" } ],
+      "fieldConfig": { "defaults": { "unit": "s", "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "type": "timeseries",
+      "title": " Consommation CPU des conteneurs CliniQ",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 13 },
+      "targets": [ { "expr": "sum(rate(container_cpu_usage_seconds_total{id=~\"/docker.*\"}[1m])) by (id) * 100", "legendFormat": "{{id}}" } ],
+      "fieldConfig": { "defaults": { "unit": "percent", "custom": { "fillOpacity": 10 } } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Consommation RAM des conteneurs CliniQ",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 13 },
+      "targets": [ { "expr": "container_memory_working_set_bytes{id=~\"/docker.*\"}", "legendFormat": "{{id}}" } ],
+      "fieldConfig": { "defaults": { "unit": "bytes", "custom": { "fillOpacity": 10 } } }
+    }
+  ]
+}
