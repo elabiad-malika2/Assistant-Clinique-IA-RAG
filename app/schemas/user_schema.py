@@ -3,7 +3,7 @@ from pydantic import BaseModel , EmailStr
 class UserCreate(BaseModel):
     username: str
     email: EmailStr
-    password: str  # Mot de passe en clair, hashé côté serveur avant stockage
+    password: str  
     role: str = "doctor"
 
 class UserResponse(BaseModel):

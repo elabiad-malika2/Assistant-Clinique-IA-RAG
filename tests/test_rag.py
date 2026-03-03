@@ -11,7 +11,7 @@ def test_prompt_generation():
     prompt_final = get_clinical_prompt(question, context)
 
     assert "CliniQ" in prompt_final
-    assert "RÈGLE" in prompt_final  # plus robuste que chercher un mot précis
+    assert "RÈGLE" in prompt_final  
     assert question in prompt_final
     assert context in prompt_final
 

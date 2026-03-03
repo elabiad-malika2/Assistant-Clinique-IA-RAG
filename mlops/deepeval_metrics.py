@@ -15,14 +15,14 @@ def _build_ollama_model():
     Change 'phi3' par le modèle que tu veux si besoin.
     """
     return OllamaModel(
-        model="phi3",                 # ou "mistral", "llama3", etc.
-        base_url="http://host.docker.internal:11434",  # important pour Docker
+        model="phi3",                 
+        base_url="http://host.docker.internal:11434", 
         temperature=0.0,
     )
 
 
 def evaluate_rag_response(question: str, response: str, contexts: list) -> dict:
-    print(" Calcul des 4 notes DeepEval avec Gemini en cours...")
+    print(" Calcul des 4 notes DeepEval avec Ollama en cours...")
 
     test_case = LLMTestCase(
         input=question,

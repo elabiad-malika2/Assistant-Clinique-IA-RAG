@@ -1,5 +1,5 @@
 {
-  "title": "🏥 CliniQ - Monitoring RAG & Infrastructure",
+  "title": " CliniQ - Monitoring RAG & Infrastructure",
   "tags": ["cliniq", "rag", "fastapi", "docker"],
   "timezone": "browser",
   "refresh": "5s",

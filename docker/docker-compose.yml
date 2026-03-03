@@ -43,9 +43,7 @@ services:
       - ollama_data:/usr/share/ollama/.ollama
     tty: true
     stdin_open: true
-  # ... (db, api, mlflow) ...
 
-  # 1. cAdvisor : Collecte les métriques CPU / RAM de Docker
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.0
     container_name: cliniq_cadvisor
@@ -57,7 +55,6 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
 
-  # 2. Prometheus : Stocke les métriques et gère les alertes
   prometheus:
     image: prom/prometheus:latest
     container_name: cliniq_prometheus
@@ -67,17 +64,13 @@ services:
       - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
       - ../monitoring/alerts.yml:/etc/prometheus/alerts.yml
 
-  # 3. Grafana : Les beaux tableaux de bord visuels
   grafana:
     image: grafana/grafana:latest
     container_name: cliniq_grafana
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin # Mot de passe par défaut
-
-  # ... (votre db et votre api existantes) ...
-
+      - GF_SECURITY_ADMIN_PASSWORD=admin 
   frontend:
     build:
       context: ..          
