@@ -10,9 +10,7 @@ MODEL_NAME = "dangvantuan/sentence-camembert-base"
 _model = None
 
 def get_embedding_model():
-    """
-    Charge le modèle d'embedding s'il n'est pas déjà chargé.
-    """
+    
     global _model
     if _model is None:
         print(f" Chargement du modèle d'embedding : {MODEL_NAME}...")
@@ -25,7 +23,6 @@ def embed_text(text: str) -> List[float]:
     Convertit un seul texte simple en vecteur (embedding).
     """
     model = get_embedding_model()
-    # encode() renvoie un tableau numpy, on le convertit en liste python standard
     embedding = model.encode(text)
     return embedding.tolist()
 

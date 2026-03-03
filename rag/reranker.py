@@ -13,7 +13,6 @@ def rerank_documents(query: str, documents: List[str],top_n: int = 3) -> List[st
     if not documents:
         return []
         
-    # On crée des paires [Question, Passage] pour que le modèle les note
     pairs = [[query, doc] for doc in documents]
     scores = _reranker_model.predict(pairs)
     

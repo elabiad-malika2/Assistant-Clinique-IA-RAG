@@ -7,7 +7,7 @@ def parse_pdf_to_markdown(pdf_path: str) -> str:
     if not os.path.exists(pdf_path):
         raise FileNotFoundError(f"Le fichier {pdf_path} est introuvable.")
 
-    print(f"📄 Début de l'analyse avec LlamaParse pour : {pdf_path}")
+    print(f" Début de l'analyse avec LlamaParse pour : {pdf_path}")
     
     # Configuration du parser
     parser = LlamaParse(
