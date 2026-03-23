@@ -6,7 +6,6 @@ from typing import List
 # Choix du modèle performant pour le français médical
 MODEL_NAME = "dangvantuan/sentence-camembert-base"
 
-# Variable globale pour stocker le modèle en mémoire (Lazy Loading)
 _model = None
 
 def get_embedding_model():

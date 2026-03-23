@@ -1,3 +1,6 @@
+from sqlalchemy import Column
+
+
 def get_clinical_prompt(question: str, context: str) -> str:
     prompt = f"""Tu es CliniQ, un assistant décisionnel clinique expert développé par ProtoCare.
 Tu dois répondre en te basant PRIORITAIREMENT sur le CONTEXTE MÉDICAL fourni.
@@ -18,3 +21,26 @@ QUESTION :
 RÉPONSE :
 """
     return prompt
+
+
+# router.get("/history"):
+# def get_Hisotrique(db=Depends(get_db),current_user:User=Depends(get_user_connect)):
+#     historique=db.query(Query).filter(Query.userèid==current_user.id)
+
+#     return historique
+
+# class Query():
+#     __tablename__="queries"
+#     id=Column(Integer,primary_key=True)
+#     reponse=Column(String,nullable=Flase)
+#     question=Column(String,nullable=Flase)
+#     user_id=Column(Integer,ForeignKey('User.id'))
+
+@patch("api.url")
+def tesLLM(mockia):
+
+    db=MagicMock()
+    user=1
+    question="Comment traiter le maux de tete"
+
+    mockia.return_value=""
